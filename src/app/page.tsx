@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@/components/Footer";
 import { useState, useCallback, useRef, useEffect } from "react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -275,374 +276,323 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <div className="max-w-3xl mx-auto px-4 py-14">
+    <>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+        <div className="max-w-3xl mx-auto px-4 py-14">
 
-        {/* ── Header ── */}
-        <div className="text-center mb-12">
-          <span className="inline-flex items-center gap-2 bg-blue-600 text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-wide uppercase">
-            AI-Powered Resume Analyzer
-          </span>
-          <h1 className="text-5xl font-extrabold text-slate-900 leading-tight mb-4">
-            Land Your{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-              Dream Job
+          {/* ── Header ── */}
+          <div className="text-center mb-12">
+            <span className="inline-flex items-center gap-2 bg-blue-600 text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-wide uppercase">
+              AI-Powered Resume Analyzer
             </span>
-          </h1>
-          <p className="text-lg text-slate-500 max-w-xl mx-auto">
-            Upload your resume and get instant AI feedback — score, line-by-line
-            rewrites, and everything you need to stand out.
-          </p>
-        </div>
+            <h1 className="text-5xl font-extrabold text-slate-900 leading-tight mb-4">
+              Land Your{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                Dream Job
+              </span>
+            </h1>
+            <p className="text-lg text-slate-500 max-w-xl mx-auto">
+              Upload your resume and get instant AI feedback — score, line-by-line
+              rewrites, and everything you need to stand out.
+            </p>
+          </div>
 
-        {/* ── Upload card ── */}
-        <div className="bg-white rounded-2xl shadow-md border border-slate-100 p-8 mb-6">
-          {/* Drop zone */}
-          <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            onClick={() => fileInputRef.current?.click()}
-            className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all duration-200 ${
-              isDragging
+          {/* ── Upload card ── */}
+          <div className="bg-white rounded-2xl shadow-md border border-slate-100 p-8 mb-6">
+            {/* Drop zone */}
+            <div
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current?.click()}
+              className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all duration-200 ${isDragging
                 ? "border-blue-500 bg-blue-50 scale-[1.01]"
                 : file
                   ? "border-green-400 bg-green-50"
                   : "border-slate-300 hover:border-blue-400 hover:bg-blue-50"
-            }`}
-          >
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".pdf,.docx,.txt"
-              className="hidden"
-              onChange={(e) => e.target.files?.[0] && validateAndSetFile(e.target.files[0])}
-            />
-
-            {file ? (
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
-                  <svg className="w-7 h-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-800">{file.name}</p>
-                  <p className="text-sm text-slate-400">
-                    {(file.size / 1024).toFixed(1)} KB &mdash; Click to change
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center">
-                  <svg className="w-7 h-7 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-700">
-                    {isDragging ? "Drop it!" : "Drop your resume here"}
-                  </p>
-                  <p className="text-sm text-slate-400">
-                    or click to browse &mdash; PDF, DOCX, TXT &mdash; max 10 MB
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Error */}
-          {error && (
-            <div className="mt-4 flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
-              <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              {error}
-            </div>
-          )}
-
-          {/* Analyze button */}
-          {file && (
-            <button
-              onClick={analyzeResume}
-              disabled={isAnalyzing}
-              className="w-full mt-5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-60 text-white font-semibold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                }`}
             >
-              {isAnalyzing ? (
-                <>
-                  <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
-                  Analyzing your resume&hellip;
-                </>
-              ) : (
-                <>
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                  Analyze Resume
-                </>
-              )}
-            </button>
-          )}
-        </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf,.docx,.txt"
+                className="hidden"
+                onChange={(e) => e.target.files?.[0] && validateAndSetFile(e.target.files[0])}
+              />
 
-        {/* ── Resume preview (shows as soon as file is selected) ── */}
-        {file && (
-          <div className="mb-6">
-            <ResumePreview file={file} previewUrl={previewUrl} previewText={previewText} />
-          </div>
-        )}
-
-        {/* ── Analysis results ── */}
-        {analysis && (
-          <div ref={resultsRef} className="space-y-6">
-
-            {/* Score + Summary */}
-            <div className="bg-white rounded-2xl shadow-md border border-slate-100 p-8 flex items-center gap-8">
-              <ScoreRing score={analysis.score} />
-              <div>
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">
-                  Resume Score
-                </p>
-                <h2 className="text-xl font-bold text-slate-900 mb-2">
-                  {analysis.score >= 80 ? "Strong Resume"
-                    : analysis.score >= 60 ? "Decent Resume"
-                    : "Needs Work"}
-                </h2>
-                <p className="text-slate-600 text-sm leading-relaxed">{analysis.summary}</p>
-              </div>
-            </div>
-
-            {/* Strengths + Weaknesses */}
-            <div className="grid sm:grid-cols-2 gap-6">
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                  <SectionIcon color="bg-green-100">
-                    <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {file ? (
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
+                    <svg className="w-7 h-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                  </SectionIcon>
-                  Strengths
-                </h3>
-                <ul className="space-y-2.5">
-                  {analysis.strengths.map((s, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
-                      <span className="text-green-500 font-bold mt-0.5">+</span>
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                  <SectionIcon color="bg-orange-100">
-                    <svg className="w-4 h-4 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                  </SectionIcon>
-                  Areas to Improve
-                </h3>
-                <ul className="space-y-2.5">
-                  {analysis.weaknesses.map((w, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
-                      <span className="text-orange-500 font-bold mt-0.5">!</span>
-                      {w}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Missing sections */}
-            {analysis.missingSections?.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                  <SectionIcon color="bg-rose-100">
-                    <svg className="w-4 h-4 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                    </svg>
-                  </SectionIcon>
-                  Missing Sections
-                </h3>
-                <p className="text-sm text-slate-500 mb-3">
-                  These sections are absent or critically underdeveloped in your resume:
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {analysis.missingSections.map((sec, i) => (
-                    <span
-                      key={i}
-                      className="flex items-center gap-1.5 bg-rose-50 text-rose-700 border border-rose-200 text-sm font-medium px-3 py-1.5 rounded-full"
-                    >
-                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-                      </svg>
-                      {sec}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Actionable improvements */}
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-              <h3 className="font-bold text-slate-900 mb-5 flex items-center gap-2">
-                <SectionIcon color="bg-blue-100">
-                  <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </SectionIcon>
-                Actionable Improvements
-              </h3>
-              <div className="space-y-3">
-                {analysis.improvements.map((imp, i) => (
-                  <div key={i} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <PriorityBadge priority={imp.priority} />
-                      <h4 className="font-semibold text-slate-800 text-sm">{imp.title}</h4>
-                    </div>
-                    <p className="text-sm text-slate-600 leading-relaxed">{imp.description}</p>
                   </div>
-                ))}
-              </div>
+                  <div>
+                    <p className="font-semibold text-slate-800">{file.name}</p>
+                    <p className="text-sm text-slate-400">
+                      {(file.size / 1024).toFixed(1)} KB &mdash; Click to change
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center">
+                    <svg className="w-7 h-7 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-slate-700">
+                      {isDragging ? "Drop it!" : "Drop your resume here"}
+                    </p>
+                    <p className="text-sm text-slate-400">
+                      or click to browse &mdash; PDF, DOCX, TXT &mdash; max 10 MB
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Suggested rewrites */}
-            {analysis.suggestedRewrites?.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                <h3 className="font-bold text-slate-900 mb-2 flex items-center gap-2">
-                  <SectionIcon color="bg-violet-100">
-                    <svg className="w-4 h-4 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                  </SectionIcon>
-                  Suggested Rewrites
-                </h3>
-                <p className="text-sm text-slate-500 mb-5">
-                  Drop-in replacements for the weakest lines in your resume.
-                </p>
-                <div className="space-y-4">
-                  {analysis.suggestedRewrites.map((rw, i) => (
-                    <RewriteCard key={i} rewrite={rw} />
-                  ))}
-                </div>
+            {/* Error */}
+            {error && (
+              <div className="mt-4 flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+                <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                {error}
               </div>
             )}
 
-            {/* ATS Keywords + Formatting */}
-            <div className="grid sm:grid-cols-2 gap-6">
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                  <SectionIcon color="bg-purple-100">
-                    <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            {/* Analyze button */}
+            {file && (
+              <button
+                onClick={analyzeResume}
+                disabled={isAnalyzing}
+                className="w-full mt-5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-60 text-white font-semibold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+              >
+                {isAnalyzing ? (
+                  <>
+                    <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Analyzing your resume&hellip;
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                    Analyze Resume
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+
+          {/* ── Resume preview (shows as soon as file is selected) ── */}
+          {file && (
+            <div className="mb-6">
+              <ResumePreview file={file} previewUrl={previewUrl} previewText={previewText} />
+            </div>
+          )}
+
+          {/* ── Analysis results ── */}
+          {analysis && (
+            <div ref={resultsRef} className="space-y-6">
+
+              {/* Score + Summary */}
+              <div className="bg-white rounded-2xl shadow-md border border-slate-100 p-8 flex items-center gap-8">
+                <ScoreRing score={analysis.score} />
+                <div>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">
+                    Resume Score
+                  </p>
+                  <h2 className="text-xl font-bold text-slate-900 mb-2">
+                    {analysis.score >= 80 ? "Strong Resume"
+                      : analysis.score >= 60 ? "Decent Resume"
+                        : "Needs Work"}
+                  </h2>
+                  <p className="text-slate-600 text-sm leading-relaxed">{analysis.summary}</p>
+                </div>
+              </div>
+
+              {/* Strengths + Weaknesses */}
+              <div className="grid sm:grid-cols-2 gap-6">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                  <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <SectionIcon color="bg-green-100">
+                      <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </SectionIcon>
+                    Strengths
+                  </h3>
+                  <ul className="space-y-2.5">
+                    {analysis.strengths.map((s, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                        <span className="text-green-500 font-bold mt-0.5">+</span>
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                  <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <SectionIcon color="bg-orange-100">
+                      <svg className="w-4 h-4 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                    </SectionIcon>
+                    Areas to Improve
+                  </h3>
+                  <ul className="space-y-2.5">
+                    {analysis.weaknesses.map((w, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                        <span className="text-orange-500 font-bold mt-0.5">!</span>
+                        {w}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Missing sections */}
+              {analysis.missingSections?.length > 0 && (
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                  <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <SectionIcon color="bg-rose-100">
+                      <svg className="w-4 h-4 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                      </svg>
+                    </SectionIcon>
+                    Missing Sections
+                  </h3>
+                  <p className="text-sm text-slate-500 mb-3">
+                    These sections are absent or critically underdeveloped in your resume:
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {analysis.missingSections.map((sec, i) => (
+                      <span
+                        key={i}
+                        className="flex items-center gap-1.5 bg-rose-50 text-rose-700 border border-rose-200 text-sm font-medium px-3 py-1.5 rounded-full"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                        </svg>
+                        {sec}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Actionable improvements */}
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                <h3 className="font-bold text-slate-900 mb-5 flex items-center gap-2">
+                  <SectionIcon color="bg-blue-100">
+                    <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                   </SectionIcon>
-                  ATS Keywords to Add
+                  Actionable Improvements
                 </h3>
-                <div className="flex flex-wrap gap-2">
-                  {analysis.atsKeywords.map((kw, i) => (
-                    <span key={i} className="bg-purple-50 text-purple-700 border border-purple-200 text-xs font-medium px-3 py-1 rounded-full">
-                      {kw}
-                    </span>
+                <div className="space-y-3">
+                  {analysis.improvements.map((imp, i) => (
+                    <div key={i} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <PriorityBadge priority={imp.priority} />
+                        <h4 className="font-semibold text-slate-800 text-sm">{imp.title}</h4>
+                      </div>
+                      <p className="text-sm text-slate-600 leading-relaxed">{imp.description}</p>
+                    </div>
                   ))}
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                  <SectionIcon color="bg-teal-100">
-                    <svg className="w-4 h-4 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
-                    </svg>
-                  </SectionIcon>
-                  Formatting Tips
-                </h3>
-                <ul className="space-y-2.5">
-                  {analysis.formattingTips.map((tip, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
-                      <span className="text-teal-500 mt-0.5">&rsaquo;</span>
-                      {tip}
-                    </li>
-                  ))}
-                </ul>
+              {/* Suggested rewrites */}
+              {analysis.suggestedRewrites?.length > 0 && (
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                  <h3 className="font-bold text-slate-900 mb-2 flex items-center gap-2">
+                    <SectionIcon color="bg-violet-100">
+                      <svg className="w-4 h-4 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </SectionIcon>
+                    Suggested Rewrites
+                  </h3>
+                  <p className="text-sm text-slate-500 mb-5">
+                    Drop-in replacements for the weakest lines in your resume.
+                  </p>
+                  <div className="space-y-4">
+                    {analysis.suggestedRewrites.map((rw, i) => (
+                      <RewriteCard key={i} rewrite={rw} />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ATS Keywords + Formatting */}
+              <div className="grid sm:grid-cols-2 gap-6">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                  <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <SectionIcon color="bg-purple-100">
+                      <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                      </svg>
+                    </SectionIcon>
+                    ATS Keywords to Add
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {analysis.atsKeywords.map((kw, i) => (
+                      <span key={i} className="bg-purple-50 text-purple-700 border border-purple-200 text-xs font-medium px-3 py-1 rounded-full">
+                        {kw}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                  <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <SectionIcon color="bg-teal-100">
+                      <svg className="w-4 h-4 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+                      </svg>
+                    </SectionIcon>
+                    Formatting Tips
+                  </h3>
+                  <ul className="space-y-2.5">
+                    {analysis.formattingTips.map((tip, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                        <span className="text-teal-500 mt-0.5">&rsaquo;</span>
+                        {tip}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
+
+              {/* Reset */}
+              <button
+                onClick={reset}
+                className="w-full py-3.5 border-2 border-slate-200 text-slate-500 font-semibold rounded-xl hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50 transition-all"
+              >
+                Analyze Another Resume
+              </button>
             </div>
-
-            {/* Reset */}
-            <button
-              onClick={reset}
-              className="w-full py-3.5 border-2 border-slate-200 text-slate-500 font-semibold rounded-xl hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50 transition-all"
-            >
-              Analyze Another Resume
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* ── Footer ── */}
-      <footer className="border-t border-slate-200 bg-white/60 backdrop-blur-sm mt-8">
-        <div className="max-w-3xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-slate-400">
-            Built by <span className="font-semibold text-slate-600">Gil Lopez Pacturan</span>
-          </p>
-          <div className="flex items-center gap-4">
-            {/* GitHub */}
-            <a
-              href="https://github.com/Phnumbahwan"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900 transition-colors"
-            >
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-              </svg>
-              GitHub
-            </a>
-
-            <span className="text-slate-200">|</span>
-
-            {/* LinkedIn */}
-            <a
-              href="https://www.linkedin.com/in/gil-lopez-pacturan-460b0a1a7/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-blue-600 transition-colors"
-            >
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-              </svg>
-              LinkedIn
-            </a>
-
-            <span className="text-slate-200">|</span>
-
-            {/* Portfolio */}
-            <a
-              href="https://gilpacturan.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-indigo-600 transition-colors"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-              </svg>
-              Portfolio
-            </a>
-          </div>
+          )}
         </div>
-      </footer>
-    </div>
+      </div>
+      {/* ── Footer ── */}
+      <Footer />
+    </>
   );
 }
